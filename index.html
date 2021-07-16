@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weatherapp-Tarakeswar</title>
+    <link rel="icon" href="https://image.flaticon.com/icons/png/512/578/578116.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    
+    <style type="text/css">
+    body{
+     
+     
+     filter: drop-shadow( 0px 1px black);
+    }
+        .container {
+  
+  height: 500px;
+ width: 258px;
+ display: flex;
+ flex-direction: column;
+ margin-left: 40%;
+ margin-top: 5%;
+
+ animation: wholebox 2s infinite alternate;
+}
+.details {
+ display: flex;
+ flex-direction: row;
+ flex-wrap: wrap;
+ justify-content: space-between;
+ align-items: baseline;
+ font-family: 'Zen Loop', cursive;
+}
+#weather {
+margin-top: 0%;
+ text-align: center;
+ font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#image {
+ 
+ margin-left: 40%;
+ height: 10%;
+ width: 20%;
+}
+
+#place {
+
+ text-align: center;
+ font-size: 25px;
+ margin-left: 3px;
+ margin-bottom: 0%;
+ padding-top: 2em;
+}
+#day {
+
+font-size: 25px;
+
+}
+
+#temp {
+
+ text-align: center;
+ font-family: 'Montserrat', sans-serif;
+ 
+ font-size: 80px;
+ font-weight: 5px;
+}
+
+#time {
+
+margin-bottom: 0%;
+margin-right: 1%;
+padding-top: 5em;
+font-size: 20px;
+}
+@keyframes wholebox{
+ 0%{border-radius: 5px; background-color: skyblue;transform: rotate(-5deg);}
+ 50%{background-color: rgb(233, 224, 207);}
+ 100%{border-radius: 50px; background-color: silver; transform: rotate(5deg); }
+}
+.pl {
+  margin-left: 40%;
+
+font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+#butt {
+  border-radius: 5px;
+}
+#butt:hover {
+  cursor: pointer;
+  background-color: aquamarine;
+ 
+}
+#ext {
+  border-style: ridge;
+}
+
+
+    </style>
+</head>
+<body>
+    <p class="form">
+        <span class="pl">
+           city name <input type="text" id="ext" value="" placeholder="Enter cityname">
+<button id="butt" onclick="printme()">submit</button> </span>
+</p>
+   <p id="webapp"></p>
+  
+    
+   
+   <script>
+       function printme() {
+           if(document.getElementById('ext').value != ""){
+     
+        var linkval = "https://api.openweathermap.org/data/2.5/weather?q=" + document.getElementById('ext').value + "&appid=a2480db3f2ad21ebec714e386661942b";
+        fetch(linkval)
+        .then((response) => { return response.json() })
+        .then((result) => { 
+          document.getElementById('webapp').innerHTML='<div class="container"><img src="" alt="icon" id="image"><p id="weather"></p> <p id="temp">30 C</p><div class="details"><p id="place"></p><p id="day"></p><p id="time"></p></div></div>'
+        var today = new Date();
+        var day = ["sun", "mon", "tue", "wed", "thus", "fri", "sat"];
+        document.getElementById('day').innerText = day[today.getDay()];
+      //  document.getElementById('time').innerText = today.toTimeString();
+        function formatAMPM(date) {
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var ampm = hours >= 12 ? 'pm' : 'am';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            var strTime = hours + ':' + minutes + ' ' + ampm;
+            return strTime;
+        }
+        setInterval(function() {document.getElementById('time').innerText = formatAMPM(new Date());},100);
+        // document.getElementById('time').innerText = formatAMPM(new Date());
+       
+            document.getElementById('image').src= "https://openweathermap.org/img/wn/" +result.weather[0].icon + "@2x.png"  //.weather[0].icon;
+            document.getElementById('weather').innerText=result.weather[0].main;
+        document.getElementById('place').innerText=result.name;
+    document.getElementById('temp').innerText=Math.round(result.main.temp - 273.15) + "°C"})
+        .catch((err) => { document.write("<h1>something went wrong</h1><h2>Or data may not be available for the city</h2>"); }); 
+           }
+       }
+       
+   </script>
+</body>
+</html>
